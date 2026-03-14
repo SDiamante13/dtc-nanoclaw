@@ -6,6 +6,7 @@ import { ChildProcess, exec, spawn } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
+import os from 'os';
 import {
   CONTAINER_IMAGE,
   CONTAINER_MAX_OUTPUT_SIZE,
@@ -80,6 +81,16 @@ function buildVolumeMounts(
       containerPath: '/workspace/group',
       readonly: false,
     });
+
+    // Google MCP credentials (main group only)
+    const googleMcpDir = path.join(os.homedir(), '.google-mcp');
+    if (fs.existsSync(googleMcpDir)) {
+      mounts.push({
+        hostPath: googleMcpDir,
+        containerPath: '/workspace/google-mcp-data/google-mcp',
+        readonly: false, // tokens.json needs refresh writes
+      });
+    }
   } else {
     // Other groups only get their own folder
     mounts.push({

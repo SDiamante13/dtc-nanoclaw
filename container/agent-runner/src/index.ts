@@ -417,7 +417,7 @@ async function runQuery(
   for await (const message of query({
     prompt: stream,
     options: {
-      model: process.env.NANOCLAW_MODEL || 'claude-haiku-4-5-20251001',
+      model: process.env.NANOCLAW_MODEL || 'claude-sonnet-4-6-20250514',
       cwd: '/workspace/group',
       additionalDirectories: extraDirs.length > 0 ? extraDirs : undefined,
       resume: sessionId,
@@ -434,7 +434,11 @@ async function runQuery(
         'TodoWrite', 'ToolSearch', 'Skill',
         'NotebookEdit',
         'mcp__nanoclaw__*',
-        'mcp__notion__*'
+        'mcp__notion__*',
+        'mcp__google__docs_*',
+        'mcp__google__drive_*',
+        'mcp__google__sheets_*',
+        'mcp__google__google_auth',
       ],
       env: sdkEnv,
       permissionMode: 'bypassPermissions',
@@ -456,6 +460,16 @@ async function runQuery(
             args: ['@notionhq/notion-mcp-server', '--transport', 'stdio'],
             env: {
               NOTION_TOKEN: sdkEnv.NOTION_API_KEY,
+            },
+          },
+        } : {}),
+        ...(fs.existsSync('/workspace/google-mcp-data/google-mcp/credentials.json') ? {
+          google: {
+            command: 'npx',
+            args: ['@pegasusheavy/google-mcp'],
+            env: {
+              XDG_CONFIG_HOME: '/workspace/google-mcp-data',
+              XDG_DATA_HOME: '/workspace/google-mcp-data',
             },
           },
         } : {}),
