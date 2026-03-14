@@ -1,0 +1,53 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "${{ secrets.DEPLOY_HOST_KEY }}" > ~/.ssh/known_hosts
+
+      - name: Deploy code and conditionally rebuild container
+        run: |
+          ssh -i ~/.ssh/deploy_key deploy@${{ secrets.DEPLOY_HOST }} << 'DEPLOY'
+            set -e
+            cd /home/deploy/nanoclaw
+
+            PREV=$(git rev-parse HEAD)
+            git fetch origin main
+            git reset --hard origin/main
+
+            npm ci
+            npx tsc
+
+            if git diff --name-only "$PREV" HEAD | grep -q '^container/'; then
+              echo "Container files changed — rebuilding image..."
+              ./container/build.sh
+            fi
+
+            sudo systemctl restart nanoclaw
+            sleep 10
+            sudo systemctl is-active nanoclaw
+          DEPLOY
+
+      - name: Telegram alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST \
+            "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="⚠️ NanoClaw deploy failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            -d parse_mode=HTML

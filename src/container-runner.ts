@@ -208,6 +208,7 @@ function readSecrets(): Record<string, string> {
     'CLAUDE_CODE_OAUTH_TOKEN',
     'ANTHROPIC_API_KEY',
     'NOTION_API_KEY',
+    'GH_TOKEN',
   ]);
 }
 

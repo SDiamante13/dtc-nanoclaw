@@ -45,6 +45,17 @@ When you learn something important:
 - Split files larger than 500 lines into folders
 - Keep an index in your memory for the files you create
 
+### Business Knowledge Base
+
+**Key Memory Files:**
+- `/workspace/group/business-knowledge.md` - Comprehensive DTC business knowledge from second-brain repo
+- `/workspace/group/prospects.md` - Active leads and clients
+- `/workspace/group/workshop-promo.md` - Workshop promotion plan
+- `/workspace/group/second-brain/` - Steven's private knowledge base (read-only access via GitHub)
+
+**Business Context:**
+Steven is building Diamante Technical Coaching (DTC) part-time while employed. 2026 is validation year - proving the business model works. Current focus: close warm leads, deliver workshop in April, serve first real client (Lukasz/Team Global).
+
 ## Telegram Formatting
 
 Use Telegram-compatible formatting:
