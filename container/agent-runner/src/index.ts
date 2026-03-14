@@ -456,8 +456,8 @@ async function runQuery(
         },
         ...(sdkEnv.NOTION_API_KEY ? {
           notion: {
-            command: 'npx',
-            args: ['@notionhq/notion-mcp-server', '--transport', 'stdio'],
+            command: 'node',
+            args: ['/app/node_modules/@notionhq/notion-mcp-server/bin/cli.mjs', '--transport', 'stdio'],
             env: {
               NOTION_TOKEN: sdkEnv.NOTION_API_KEY,
             },
@@ -465,8 +465,8 @@ async function runQuery(
         } : {}),
         ...(fs.existsSync('/workspace/google-mcp-data/google-mcp/credentials.json') ? {
           google: {
-            command: 'npx',
-            args: ['@pegasusheavy/google-mcp'],
+            command: 'node',
+            args: ['/app/node_modules/@pegasusheavy/google-mcp/dist/index.js'],
             env: {
               XDG_CONFIG_HOME: '/workspace/google-mcp-data',
               XDG_DATA_HOME: '/workspace/google-mcp-data',
