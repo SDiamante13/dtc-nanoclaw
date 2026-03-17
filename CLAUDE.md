@@ -93,5 +93,5 @@ The container buildkit caches the build context aggressively. `--no-cache` alone
 | Integration | How Configured | Main-only |
 |-------------|---------------|-----------|
 | Notion | `NOTION_API_KEY` env var → MCP server in agent-runner | No |
-| Google Docs/Drive/Sheets | `~/.google-mcp/` mounted into container → MCP server | Yes |
+| Google (Docs, Drive, Sheets, Gmail, Calendar, Slides, Tasks, People, Forms, Chat, YouTube, Meet) | `~/.google-mcp/` mounted into container → MCP server | Yes |
 | GitHub | `GH_TOKEN` env var → passed to SDK env | No |
