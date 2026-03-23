@@ -220,6 +220,7 @@ function readSecrets(): Record<string, string> {
     'ANTHROPIC_API_KEY',
     'NOTION_API_KEY',
     'GH_TOKEN',
+    'NANOCLAW_MODEL',
   ]);
 }
 
